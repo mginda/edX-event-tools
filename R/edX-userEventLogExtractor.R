@@ -40,7 +40,7 @@
 #   2017.08.28. Fixed require statement bug (moved required packages in individual require statements)
 #   2017.08.29. Update to comments, file saving updates, added save to RData file (added to JSON and CSV) 
 #   2017.09.29. Updating file for sharing
-
+#   2017.10.19. Updated file to produce user trajectory logs for list of known students based on DF or list of user IDS
 #
 ## ===================================================== ##
 
@@ -58,190 +58,190 @@ start <-  proc.time() #save the time (to compute elapsed time of script)
 ## _Load required packages #####
 require("ndjson")     #needed to read the non-standard JSON log files (NDJSON format)
 require("jsonlite")   #for working with JSON files (esp. read and write)
-require("tcltk")      #for OS independant GUI file and folder selection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-######### Main ########## 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## _Build list of all event files ####
-#Store all the filenames of JSON formatted edX event logs within a user selected directory 
-# (files ending with ".log.gz").
-####"(The file picker window may have opened in the background.  Check behind this window if you do not see it.) \n")
-cat("\n*****Select the folder containing the event log files.***** (The log files should be '*.log.gz'.)
-    (The file picker window may have opened in the background.  Check behind this window if you do not see it.) 
-    \n")
-fileList <- list.files(full.names = TRUE, recursive = FALSE, 
-                       path = tclvalue(tkchooseDirectory()), 
-                       
-                       pattern = ".log.gz$")
-
-# Count the number of folders
-numLogFiles <- length(fileList) 
-
-
-
-## _Save one user's complete event history #### 
-#create (or reset) eventLog file to store the combined event logs
-eventLog <- NULL
-
-#Request from user provide the userID whose event data should be extracted
-curUserID <- readline(prompt="What user_id? ")
-
-
-# loop though all files and build a single log data frame
-for(i in 1:numLogFiles){
-  curFileName <- fileList[i] 
-  
-  #print update message to console
-  message("Processing log file ", i, " of ", numLogFiles)
-  print(proc.time() - start)
-  
-  #read log data (NOTE: logs are in NDJSON format, not typical JSON format)
-  ndData <- ndjson::stream_in(curFileName)
-  
-  #extract events for a single user, add to the complete eventLog for that user
-  eventLog <- rbind.data.frame(eventLog, subset(ndData,ndData$context.user_id==curUserID), fill=TRUE)
-  
-}
-
-
-## _Save data to file(s) ####
-# Ask user for the save file base filename
-repeat
-{  
-  useDefaultFilename <- readline(prompt = paste0("Would you like to use 'Full event log for ", 
-                                                 curUserID, "' as the save file base filename? (Y/N): "))
-  
-  if(useDefaultFilename == "Y" | useDefaultFilename == 'y') #use presented default filename
-  {
-    saveFilename <- paste0("Full event log for ", curUserID)
-    break   #exit the repeat loop
+require("tcltk2")     #for OS independant GUI file and folder selection
+
+####Functions 
+#logCapture 
+##The logCapture function is a modification of code provided by Purdue University team
+##to allow mass extracting individual set of student logs based on known set of student IDs for an 
+##edX course. The function creates a unique log file for each student ID in the list, 
+##saved as either a JSON or CSV formatted file. The function currently set up to save as CSV,
+##alternatively can be set for user defined action such as format=T csv if format=F, JSON set up possible.
+
+logCapture <- function(curUserIDS,fileList,eventLog,path){      
+  numStudents <- length(curUserIDS)
+  numLogFiles <- length(fileList) 
+  for(j in 1:numStudents){
+    curUser <- curUserIDS[j]
+    for(i in 1:numLogFiles){
+      curFileName <- fileList[i] 
+      #print update message to console
+      message("Processing log file ", i, " of ", numLogFiles)
+      print(proc.time() - start)
+      #read log data (NOTE: logs are in NDJSON format, not typical JSON format)
+      ndData <- ndjson::stream_in(curFileName)
+      #extract events for a single user, add to the complete eventLog for that user
+      eventLog <- rbind.data.frame(eventLog, subset(ndData,ndData$context.user_id==curUser), fill=TRUE)
+      id <- curUser
+    }
+    #Used to clean up the large amount of columns that are present in a course that are not sparsely used
+    eventLog <- eventLog[,c(1,2,3,4,6,7,8,9,10,11,12,16,17,19,20,27,29,37,38,
+                            42,50,109,110,111,112,113,114,115,116,117,118,119,
+                            120,121,122,123,124,125,126,127,128,129,130,131,132,
+                            133,134,135,136,137,138,139,248,249,250,251,252,253,
+                            254,255,256,257,258,259,260,261,262,263,264,265,266,
+                            267,268,269,270,271,272,273,274,275,276,277,278,279,
+                            280,281,282,283,284,285,286,287,288,3007,3008,3202,
+                            3203,4536,4537,4538,4539,4553,5023,5024)]
+    #    eventLog <- eventLog[,!grepl("^event\\.new\\wstate\\.",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("^event\\.old\\wstate\\.",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("^event\\.new\\wstate\\.",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("^event\\.state\\.correct\\wmap",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("^event\\.state\\.done",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("^event\\.state\\.input\\wstate",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("^event\\.state\\.student\\wanswers",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("^event\\.state\\.submission",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("event\\.user\\wid",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("event\\.mode",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("event\\.course\\wid",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("context\\.course\\wuser\\wtags",names(eventLog))]
+    #    eventLog <- eventLog[,!grepl("context\\.asides",names(eventLog))]
     
-  }else if(useDefaultFilename == "N" | useDefaultFilename == 'n') #use user provided filename
-  {
-    saveFilename <- readline(prompt="Filename (without extension): ")
-    break   #exit the repeat loop
-  }else   #catch bad user input
-  {
-    message("\nPlease enter 'Y' or 'N'\n")
+    write.csv(x = eventLog, file = paste0(path,"/",id,".csv"),
+              row.names = F)
+    eventLog <- NULL
   }
 }
 
-# ###TW: The following directory selection is working, but using the resulting selected folder within 
-#         the save functions isn't, so commenting section out for now
-# # Ask user for which directory to save file to
-# repeat
-# {
-#   useDefaultDirectory <- readline(prompt = paste0("Would you like to save files to \n'", 
-#                                                   getwd(), "/output_userEventLogs/'? (Y/N): "))
-#   if(useDefaultDirectory == "Y" | useDefaultDirectory == 'y') #save to working directory
-#   {
-#     saveDirectory <- file.path(getwd(), "output_userEventLogs")
-#     break   #exit the repeat loop
-#     
-#   }else if(useDefaultDirectory == "N" | useDefaultDirectory == 'n') #use user provided directory
-#   {
-#     cat("Select a directory to save files to.")
-#     saveDirectory <- tclvalue(tkchooseDirectory())
-#     break   #exit the repeat loop
-#   }else   #catch bad user input
-#   {
-#     message("\nPlease enter 'Y' or 'N'\n")
-#   }
-# }
+######### Main ########## 
+#Test set of individual userIDs for students in an edX Course whose event data should be extracted
+#Test code for function
+d <- data.frame(matrix(ncol = 1, nrow = 2))
+names(d) <- c("ids")
+d$ids <-  c("52848848","227878041")
+curUserIDS <- d$ids
+rm(d)
+
+#Creates paths used to locate directory for research data sets and save processing outputs
+path_data <- c("Z:/research/17-Boeing/data/edx/MITProfessionalX_SysEngxB1_3T2016/events")
+#path_data = tclvalue(tkchooseDirectory())
+path_output <- c("Z:/research/17-Boeing/data/edx/MITProfessionalX_SysEngxB1_3T2016/output/")
+#path_output = tclvalue(tkchooseDirectory())
+
+## _Build list of all event files for course####
+#Store all the filenames of JSON formatted edX event logs within a user selected directory 
+# (files ending with ".log.gz").
+
+
+
+
+fileList <- list.files(full.names = TRUE, recursive = FALSE, 
+                       
+                       path = path_data,
+                       pattern = ".log.gz$")
 
 
 
 
 
 
+
+#create (or reset) eventLog file to store the combined event logs
+eventLog <- NULL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Log Capture function for list of users
+logCapture(curUserIDS,fileList,eventLog,path=path_output)
+
+####
+#Old Data Export tools
 #Save the full log to file back as a single JSON file (in typical JSON format, not NDJSON)
-cat("\nSave user's log to .JSON.\n\n")
+#cat("\nSave user's log to .JSON.\n\n")
 # write_json(x = eventLog, path = file.path(saveDirectory, paste0(saveFilename, ".json")))
-write_json(x = eventLog, path = choose.files(caption = paste0("Save As... for userID ", curUserID),
-                                             default = saveFilename,
-                                             
-                                             filters = c("JSON (.json)","*.json")))
+#write_json(x = eventLog, path = choose.files(caption = paste0("Save As... for userID ", curUserID),
+
+#                                             default = saveFilename,
+#                                             filters = c("JSON (.json)","*.json")))
 
 #Save full log as a CSV file
-cat("\nSave user's log to .CSV.\n\n")
+#cat("\nSave user's log to .CSV.\n\n")
 # write.csv(x = eventLog, path = file.path(saveDirectory, paste0(saveFilename, ".csv")))
-write.csv(x = eventLog, file = choose.files(caption = paste0("Save As... for userID ", curUserID),
-                                            default = saveFilename,
-                                            
-                                            filters = c("CSV (.csv)","*.csv")))
+#write.csv(x = eventLog, file = choose.files(
+
+#  default = saveFilename,
+#  filters = c("CSV (.csv)","*.csv")))
 
 #Save full log as a RData file
-cat("\nSave user's log to .RData\n\n")
+#cat("\nSave user's log to .RData\n\n")
 # save(eventLog, file = file.path(saveDirectory, paste0(saveFilename, ".RData")), precheck = TRUE)
-save(eventLog, file = choose.files(caption = paste0("Save As... for userID ", curUserID),
-                                   default = saveFilename,
-                                   filters = c("RData (.RData)","*.RData")))
+#save(eventLog, file = choose.files(caption = paste0("Save As... for userID ", curUserID),
+#                                   default = saveFilename,
+#                                  filters = c("RData (.RData)","*.RData")))
 
 
 ######### Finishing Details ########## 
