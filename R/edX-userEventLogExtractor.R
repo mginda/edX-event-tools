@@ -40,20 +40,16 @@
 #   2017.08.28. Fixed require statement bug (moved required packages in individual require statements)
 #   2017.08.29. Update to comments, file saving updates, added save to RData file (added to JSON and CSV) 
 #   2017.09.29. Updating file for sharing
-#   2017.10.19. Updated file to produce user trajectory logs for list of known students based on DF or list of user IDS
+#   2017.10.19. Updated file to produce user trajectory logs for list of known students based on DF or list of user IDS (by MG)
 #
 ## ===================================================== ##
-
-
 
 ######### Setup ########## 
 ## _Clean the environment ####
 rm(list=ls()) 
 
-
 ## _start timer to track how long the script takes to execute
 start <-  proc.time() #save the time (to compute elapsed time of script)
-
 
 ## _Load required packages #####
 require("ndjson")     #needed to read the non-standard JSON log files (NDJSON format)
@@ -123,97 +119,20 @@ curUserIDS <- d$ids
 rm(d)
 
 #Creates paths used to locate directory for research data sets and save processing outputs
-path_data <- c("Z:/research/17-Boeing/data/edx/MITProfessionalX_SysEngxB1_3T2016/events")
+path_data <- c("__________/events")
 #path_data = tclvalue(tkchooseDirectory())
-path_output <- c("Z:/research/17-Boeing/data/edx/MITProfessionalX_SysEngxB1_3T2016/output/")
+path_output <- c("__________/output/")
 #path_output = tclvalue(tkchooseDirectory())
 
 ## _Build list of all event files for course####
 #Store all the filenames of JSON formatted edX event logs within a user selected directory 
 # (files ending with ".log.gz").
-
-
-
-
 fileList <- list.files(full.names = TRUE, recursive = FALSE, 
-                       
                        path = path_data,
                        pattern = ".log.gz$")
 
-
-
-
-
-
-
 #create (or reset) eventLog file to store the combined event logs
 eventLog <- NULL
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #Log Capture function for list of users
 logCapture(curUserIDS,fileList,eventLog,path=path_output)
@@ -224,7 +143,6 @@ logCapture(curUserIDS,fileList,eventLog,path=path_output)
 #cat("\nSave user's log to .JSON.\n\n")
 # write_json(x = eventLog, path = file.path(saveDirectory, paste0(saveFilename, ".json")))
 #write_json(x = eventLog, path = choose.files(caption = paste0("Save As... for userID ", curUserID),
-
 #                                             default = saveFilename,
 #                                             filters = c("JSON (.json)","*.json")))
 
@@ -232,7 +150,6 @@ logCapture(curUserIDS,fileList,eventLog,path=path_output)
 #cat("\nSave user's log to .CSV.\n\n")
 # write.csv(x = eventLog, path = file.path(saveDirectory, paste0(saveFilename, ".csv")))
 #write.csv(x = eventLog, file = choose.files(
-
 #  default = saveFilename,
 #  filters = c("CSV (.csv)","*.csv")))
 
@@ -243,7 +160,6 @@ logCapture(curUserIDS,fileList,eventLog,path=path_output)
 #                                   default = saveFilename,
 #                                  filters = c("RData (.RData)","*.RData")))
 
-
 ######### Finishing Details ########## 
 #Indicate completion
 message("\n**** Complete! ****\n")
@@ -253,12 +169,8 @@ message("\n**** Complete! ****\n")
 cat("\n\n\nComplete script processing time details (in sec):\n")
 print(proc.time() - start)
 
-
-
 ## _Clear environment variables
 rm(list=ls())   
-
-
 
 ###########backup code for future feature development##########################
 
