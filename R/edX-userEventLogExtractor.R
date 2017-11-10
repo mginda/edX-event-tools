@@ -23,7 +23,7 @@
 # Description:  This script extracts all of a student's activity from the edX event log files in a user 
 #                 selected folder.  It outputs the resulting data (all events tied to a single student's ID) 
 #                 in two formats: a standard* JSON file and/or a CSV file. 
-#                 (*NOTE: the edX provided logs are in NDJSON format, not the typical JSON format.)
+#                 (*NOTE: the edX provided logs are in NDJSON (streaming JSON) format, not the typical JSON format.)
 # 
 # 
 # File input stack: 
@@ -55,7 +55,7 @@ rm(list=ls())
 start <-  proc.time() #save the time (to compute elapsed time of script)
 
 ## _Load required packages #####
-require("ndjson")     # needed to read the non-standard JSON log files (NDJSON format)
+# require("ndjson")     # needed to read the non-standard JSON log files (NDJSON format)
 require("jsonlite")   # for working with JSON files (esp. read and write)
 require("tcltk2")     # for OS independant GUI file and folder selection
 require("dplyr")      # for building tibbles (tidy data frames) 
@@ -80,7 +80,7 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
       print(proc.time() - start)
       
       #read log data (NOTE: logs are in NDJSON format, not typical JSON format)
-      ndData <- ndjson::stream_in(curFileName)
+      ndData <- stream_in(file(curFileName))
       
       #extract events for a single student, add to the complete studentEventLog for that student
       studentEventLog <- rbind.data.frame(studentEventLog, subset(ndData,ndData$context.user_id==curID), fill=TRUE)
@@ -150,7 +150,7 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
 
 ######### Main ########## 
 # retrieve list of edX student_id values (from a CSV) whose event data should be extracted 
-path_data <- c("data/access_data. all. cluster_2 (of 4).csv")
+path_student_id_csv <- c("data/access_data. all. cluster_1 (of 4) (most engaged).csv")
 # if(interactive()) path_student_id_csv = (tk_choose.files(caption = "CSV with student_id values")) #,
                                                          # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Clustering/Boeing pipeline output files/B1, run 2017.11.08/3_ClusteringOutput/access_data. all.csv"))
 students <- read.csv(path_student_id_csv, header = TRUE)
@@ -166,7 +166,7 @@ path_data <- c("data/events/")
 message("select Events directory with data")
 # if(interactive()) path_data = tk_choose.dir(caption = "select Events directory with data") #, 
                                             # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB1_3T2016/events")
-path_output <- c("output/B1 output/")
+path_output <- c("output/B1 output/cluster 1 of 4/")
 message("select the output directory")
 # if(interactive()) path_output = tk_choose.dir(caption = "select the output directory") #,
                                               # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1") 
