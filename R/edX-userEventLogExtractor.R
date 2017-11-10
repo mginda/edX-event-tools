@@ -150,8 +150,9 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
 
 ######### Main ########## 
 # retrieve list of edX student_id values (from a CSV) whose event data should be extracted 
-if(interactive()) path_student_id_csv = (tk_choose.files(caption = "CSV with student_id values", 
-                                                         default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Clustering/Boeing pipeline output files/B1, run 2017.11.08/3_ClusteringOutput/access_data. all.csv"))
+path_data <- c("data/access_data. all. cluster_2 (of 4).csv")
+# if(interactive()) path_student_id_csv = (tk_choose.files(caption = "CSV with student_id values")) #,
+                                                         # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Clustering/Boeing pipeline output files/B1, run 2017.11.08/3_ClusteringOutput/access_data. all.csv"))
 students <- read.csv(path_student_id_csv, header = TRUE)
 
 # extract only the stuent_id values
@@ -161,14 +162,14 @@ student_IDs <- add_row(student_IDs,
 
 #Creates paths used to locate directory for research data sets and save processing outputs
 ##TW TODO: set non-interactive option
-# path_data <- c("__________/events")
+path_data <- c("data/events/")
 message("select Events directory with data")
-if(interactive()) path_data = tk_choose.dir(caption = "select Events directory with data",
-                                            default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB1_3T2016/events") 
-# path_output <- c("__________/output/")
+# if(interactive()) path_data = tk_choose.dir(caption = "select Events directory with data") #, 
+                                            # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB1_3T2016/events")
+path_output <- c("output/B1 output/")
 message("select the output directory")
-if(interactive()) path_output = tk_choose.dir(caption = "select the output directory",
-                                              default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1") 
+# if(interactive()) path_output = tk_choose.dir(caption = "select the output directory") #,
+                                              # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1") 
 
 ## _Build list of all event files for course####
 #Store all the filenames of JSON formatted edX event logs within a user selected directory 
