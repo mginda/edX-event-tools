@@ -95,15 +95,13 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
         print(proc.time() - start)
         
         #read log data (NOTE: logs are in NDJSON format, not typical JSON format)
-        ndData <- stream_in(file(curFileName))
+        # ndData2 <- jsonlite::stream_in(file(curFileName))
+        ndData  <-   ndjson::stream_in(curFileName)
         
         #extract events for a single student, add to the complete studentEventLog for that student
         studentEventLog <- rbind.data.frame(studentEventLog, subset(ndData,ndData$context.user_id==curID), fill=TRUE)
       }
       
-
-      #read log data (NOTE: logs are in NDJSON format, not typical JSON format)
-      ndData <- stream_in(file(curFileName))
       
       # save all of this student's events to file
       if(fileFormat == "JSON"){
@@ -154,7 +152,16 @@ path_student_id_csv <- c("data/B1 data/access_data. all.csv")
 # if(interactive()) path_student_id_csv = (tk_choose.files(caption = "CSV with student_id values")) #,
 # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Clustering/Boeing pipeline output files/B1, run 2017.11.08/3_ClusteringOutput/access_data. all.csv"))
 
-students <- read.csv(path_student_id_csv, header = TRUE)
+
+# students <- read.csv(path_student_id_csv, header = TRUE)
+
+
+# temp id list (delete code after run) ------------------------------------
+load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/uid_assignments.RData")
+students <- data.frame(student_id = uid_TW)
+#   -----------------------------------------------------------------------
+
+
 
 # extract only the stuent_id values
 student_IDs <- tibble(student_id = as.numeric())
@@ -171,7 +178,6 @@ path_output <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextu
 message("select the output directory")
 # if(interactive()) path_output = tk_choose.dir(caption = "select the output directory") #,
 # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1") 
-
 
 ## _Build list of all event files for course####
 #Store all the filenames of JSON formatted edX event logs within a user selected directory 
