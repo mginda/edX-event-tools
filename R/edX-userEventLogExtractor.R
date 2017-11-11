@@ -125,7 +125,7 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
       #   computerProcessor: the processor details for the PC running this script
       loopSummaryLog <- add_row(loopSummaryLog,
                                 student_id = curID,
-                                modulesTouched = students[j,]$number_accesses,
+                                modulesTouched = 999, #students[j,]$number_accesses,  ##TW removing for now, restore later
                                 eventCount   = nrow(studentEventLog),
                                 date = format(Sys.time(), "%D"),
                                 time  = format(Sys.time(), "%H:%M:%S"),
