@@ -74,20 +74,19 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
   for(j in 1:numStudents){
     curID <- student_IDs$student_id[j]
     
+    
+    # Build list of all student_id values that have already completed JSON files saved within the path
     dropboxOutputPath <- "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1"
-
-    ## _Build list of all event files for course####
-    #Store all the filenames of JSON formatted edX event logs within a user selected directory 
-    # (files ending with ".log.gz").
     listCompletedIDs <- list.files(full.names = FALSE, recursive = TRUE, 
                                    path = dropboxOutputPath,
                                    pattern = ".json$", include.dirs = FALSE)
     listCompletedIDs <- sub(".*/", "", listCompletedIDs)     # remove subdirectory names
     listCompletedIDs <- sub(".json", "", listCompletedIDs)   # remove extension
     
+    # if it doesn't already exist,  build the JSON event file for the current student_id
     if(!(curID %in% listCompletedIDs)){
       
-      
+      # loop through all the event files, extract any event matching the current student_id
       for(i in 1:numLogFiles){
         curFileName <- fileList[i] 
         
@@ -148,9 +147,9 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
 # Main --------------------------------------------------------------------
 
 # retrieve list of edX student_id values (from a CSV) whose event data should be extracted 
-path_student_id_csv <- c("data/B1 data/access_data. all. cluster_4 (of 4).csv")
+path_student_id_csv <- c("data/B1 data/access_data. all.csv")
 # if(interactive()) path_student_id_csv = (tk_choose.files(caption = "CSV with student_id values")) #,
-                                                         # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Clustering/Boeing pipeline output files/B1, run 2017.11.08/3_ClusteringOutput/access_data. all.csv"))
+# default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Clustering/Boeing pipeline output files/B1, run 2017.11.08/3_ClusteringOutput/access_data. all.csv"))
 students <- read.csv(path_student_id_csv, header = TRUE)
 
 # extract only the stuent_id values
@@ -163,11 +162,11 @@ student_IDs <- add_row(student_IDs,
 path_data <- c("data/B1 data/events/")
 message("select Events directory with data")
 # if(interactive()) path_data = tk_choose.dir(caption = "select Events directory with data") #, 
-                                            # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB1_3T2016/events")
-path_output <- c("output/B1 output/cluster 1 of 4/")
+# default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB1_3T2016/events")
+path_output <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/TW Laptop/")
 message("select the output directory")
 # if(interactive()) path_output = tk_choose.dir(caption = "select the output directory") #,
-                                              # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1") 
+# default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1") 
 
 ## _Build list of all event files for course####
 #Store all the filenames of JSON formatted edX event logs within a user selected directory 
@@ -206,7 +205,7 @@ cat("\n\n\nComplete script processing time details (in sec):\n")
 print(proc.time() - start)
 
 ## _Clear environment variables
-# rm(list=ls())   
+rm(list=ls())   
 
 ###########backup code for future feature development##########################
 

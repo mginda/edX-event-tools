@@ -1,6 +1,6 @@
 edX Event Log Extractor for Individual Users 
 ==============
-Authors:      Krishna Madhavan, Kerrie Douglas, and Taylor Williams  
+Authors:      Taylor Williams  
 Affiliation:  Purdue University
 
 _&lt;<https://github.com/tzwilliams/edX-event-tools>&gt;_
@@ -38,7 +38,7 @@ At present this pipeline is designed to work within the RStudio IDE (https://www
 
 
 ## Copyright
- Copyright 2017 Krishna Madhavan
+ Copyright 2017 Taylor Williams
  
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
