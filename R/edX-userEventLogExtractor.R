@@ -157,11 +157,11 @@ path_student_id_csv <- c("data/B1 data/access_data. all.csv")
 
 
 # temp id list (delete code after run) ------------------------------------
-load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/uid_assignments.RData")
+load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/uid_assignments.RData")
 # students <- data.frame(student_id = uid_TW)
 
 #remove the earlier fraction already being worked on in another process
-students <- data.frame(student_id = uid_TW[-(1:130)])
+students <- data.frame(student_id = uid_TW[-(1:180)])
 #   -----------------------------------------------------------------------
 
 
@@ -177,7 +177,8 @@ path_data <- c("data/B1 data/events/")
 message("select Events directory with data")
 # if(interactive()) path_data = tk_choose.dir(caption = "select Events directory with data") #, 
 # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB1_3T2016/events")
-path_output <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/TW Laptop (proc2)/")
+
+path_output <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/TW Laptop/")
 message("select the output directory")
 # if(interactive()) path_output = tk_choose.dir(caption = "select the output directory") #,
 # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1") 
