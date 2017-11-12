@@ -158,25 +158,50 @@ path_student_id_csv <- c("data/B1 data/access_data. all.csv")
 
 # temp id list (delete code after run) ------------------------------------
 load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/uid_assignmentListUpdate.RData")
+
+##---v----------v----------v--------------
+### MARKED FOR DELETION ##
 # students <- data.frame(student_id = uid_TW)
+# 
+# #select the subset of IDs for this computer to process
+# numPCs <- 9
+# thisPC_number <- 9    ####UPDATE THIS VALUE###
+# 
+# numIDs <- length(uid_listForTW)
+# startIndex <- floor(numIDs*(thisPC_number-1)/numPCs) + 1
+# endIndex <- floor(numIDs*(thisPC_number)/numPCs)
+# 
+# students <- data.frame(student_id = uid_listForTW[startIndex:endIndex])
+# #   -----------------------------------------------------------------------
+# 
+# 
+# 
+# # extract only the stuent_id values
+# student_IDs <- tibble(student_id = as.numeric())
+# student_IDs <- add_row(student_IDs, 
+#                        student_id = students$student_id)
+#------------------------------------
+# #select the subset of IDs for this computer to process
+# numPCs <- 5
+# thisPC_number <- 5    ####UPDATE THIS VALUE###
+# 
+# numIDs <- length(listIncompleteIDs)
+# startIndex <- floor(numIDs*(thisPC_number-1)/numPCs) + 1
+# endIndex <- floor(numIDs*(thisPC_number)/numPCs)
+# 
+# students <- data.frame(student_id = listIncompleteIDs[startIndex:endIndex])
+# student_IDs <- data.frame(student_id = students)
+##---^-----------^----------------^----------
 
-#select the subset of IDs for this computer to process
-numPCs <- 9
-thisPC_number <- 9    ####UPDATE THIS VALUE###
+# shuffle the order of the student_id values for each instance of this script
+# doing this so all instances can run the same list with little chance of any two
+# working on the same ID at the same time
+#shuffle
+idList <- listIncompleteIDs[sample(length(listIncompleteIDs))]
+#store the shuffled list for use
+students <- data.frame(student_id = idList)
+student_IDs <- data.frame(student_id = students)
 
-numIDs <- length(uid_listForTW)
-startIndex <- floor(numIDs*(thisPC_number-1)/numPCs) + 1
-endIndex <- floor(numIDs*(thisPC_number)/numPCs)
-
-students <- data.frame(student_id = uid_listForTW[startIndex:endIndex])
-#   -----------------------------------------------------------------------
-
-
-
-# extract only the stuent_id values
-student_IDs <- tibble(student_id = as.numeric())
-student_IDs <- add_row(student_IDs, 
-                       student_id = students$student_id)
 
 #Creates paths used to locate directory for research data sets and save processing outputs
 ##TW TODO: set non-interactive option
