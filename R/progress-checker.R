@@ -27,3 +27,13 @@ pctComplete <- completed/total*100
 # print results
 completionSummary
 message(paste0(sprintf("%.1f", pctComplete), "% complete"))
+
+# save list of IDs that are not yet complete
+listCompletedIDs <- as.numeric(listCompletedIDs)
+listIncompleteIDs <- students$student_id[!(students$student_id %in% listCompletedIDs)]
+save(list = c("listIncompleteIDs"), file = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/listIncompleteIDs.RData")
+
+# excluding IDs Doipayan is covering
+load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/uid_assignments.RData")
+listIDsForTW <- listIncompleteIDs[!(listIncompleteIDs %in% uid_DR[-(1:100)])]
+save(list = c("listIDsForTW"), file = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/listIDsForTW.RData")

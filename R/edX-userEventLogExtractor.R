@@ -157,11 +157,11 @@ path_student_id_csv <- c("data/B1 data/access_data. all.csv")
 
 
 # temp id list (delete code after run) ------------------------------------
-load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/uid_assignments.RData")
+load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/listIDsForTW.RData")
 # students <- data.frame(student_id = uid_TW)
 
 #remove the earlier fraction already being worked on in another process
-students <- data.frame(student_id = uid_TW[-(1:180)])
+students <- data.frame(student_id = listIDsForTW[226:300])
 #   -----------------------------------------------------------------------
 
 
