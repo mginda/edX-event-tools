@@ -91,7 +91,7 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
         curFileName <- fileList[i] 
         
         #print update message to console
-        message("Processing log file ", i, " of ", numLogFiles, " (for student ", j, " of ", numStudents, "). Previous student completed at ", loopSummaryLog[j-1,]$time)
+        message("Processing log file ", i, " of ", numLogFiles, " (for student ", j, " of ", numStudents, "; id: ", curID, "). Previous student completed at ", loopSummaryLog[j-1,]$time)
         print(proc.time() - start)
         
         #read log data (NOTE: logs are in NDJSON format, not typical JSON format)
@@ -162,7 +162,7 @@ load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval 
 
 #select the subset of IDs for this computer to process
 numPCs <- 9
-thisPC_number <- 1    ####UPDATE THIS VALUE###
+thisPC_number <- 8    ####UPDATE THIS VALUE###
 
 numIDs <- length(listIDsForTW)
 startIndex <- floor(numIDs*(thisPC_number-1)/numPCs) + 1
