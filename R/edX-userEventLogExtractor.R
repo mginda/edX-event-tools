@@ -91,7 +91,7 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
         curFileName <- fileList[i] 
         
         #print update message to console
-        message("Processing log file ", i, " of ", numLogFiles, " (for student ", j, " of ", numStudents, "; id: ", curId, "). Previous student completed at ", loopSummaryLog[j-1,]$time)
+        message("Processing log file ", i, " of ", numLogFiles, " (for student ", j, " of ", numStudents, "; id: ", curID, "). Previous student completed at ", loopSummaryLog[j-1,]$time)
         print(proc.time() - start)
         
         #read log data (NOTE: logs are in NDJSON format, not typical JSON format)
@@ -159,17 +159,29 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
 # load("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/uid_assignments.RData")
 # student_IDs <- add_row(student_IDs,
 #                        student_id = uid_lab_machine[-(1:300)])
-load("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/listIDsForTW.RData")
+load("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/uid_assignmentListUpdate.RData")
 
-#select the subset of IDs for this computer to process
-numPCs <- 9
-thisPC_number <- 6    ####UPDATE THIS VALUE###
+##---v----------v----------v--------------
+### MARKED FOR DELETION ##
+# #select the subset of IDs for this computer to process
+# numPCs <- 5
+# thisPC_number <- 5    ####UPDATE THIS VALUE###
+# 
+# numIDs <- length(listIncompleteIDs)
+# startIndex <- floor(numIDs*(thisPC_number-1)/numPCs) + 1
+# endIndex <- floor(numIDs*(thisPC_number)/numPCs)
+# 
+# students <- data.frame(student_id = listIncompleteIDs[startIndex:endIndex])
+# student_IDs <- data.frame(student_id = students)
+##---^-----------^----------------^----------
 
-numIDs <- length(listIDsForTW)
-startIndex <- floor(numIDs*(thisPC_number-1)/numPCs) + 1
-endIndex <- floor(numIDs*(thisPC_number)/numPCs)
-
-students <- data.frame(student_id = listIDsForTW[startIndex:endIndex])
+# shuffle the order of the student_id values for each instance of this script
+  # doing this so all instances can run the same list with little chance of any two
+  # working on the same ID at the same time
+#shuffle
+idList <- listIncompleteIDs[sample(length(listIncompleteIDs))]
+#store the shuffled list
+students <- data.frame(student_id = idList)
 student_IDs <- data.frame(student_id = students)
 
 #Creates paths used to locate directory for research data sets and save processing outputs
