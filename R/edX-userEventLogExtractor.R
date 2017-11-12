@@ -160,7 +160,17 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
 # student_IDs <- add_row(student_IDs,
 #                        student_id = uid_lab_machine[-(1:300)])
 load("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/listIDsForTW.RData")
-student_IDs <- data.frame(student_id = listIDsForTW[601:700])
+
+#select the subset of IDs for this computer to process
+numPCs <- 9
+thisPC_number <- 1    ####UPDATE THIS VALUE###
+
+numIDs <- length(listIDsForTW)
+startIndex <- floor(numIDs*(thisPC_number-1)/numPCs) + 1
+endIndex <- floor(numIDs*(thisPC_number)/numPCs)
+
+students <- data.frame(student_id = listIDsForTW[startIndex:endIndex])
+student_IDs <- data.frame(student_id = students)
 
 #Creates paths used to locate directory for research data sets and save processing outputs
 ##TW TODO: set non-interactive option
