@@ -91,7 +91,7 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
         curFileName <- fileList[i] 
         
         #print update message to console
-        message("Processing log file ", i, " of ", numLogFiles, " (for student ", j, " of ", numStudents, "). Previous student completed at ", loopSummaryLog[j-1,]$time)
+        message("Processing log file ", i, " of ", numLogFiles, " (for student ", j, " of ", numStudents, "; id: ", curId, "). Previous student completed at ", loopSummaryLog[j-1,]$time)
         print(proc.time() - start)
         
         #read log data (NOTE: logs are in NDJSON format, not typical JSON format)
@@ -163,7 +163,7 @@ load("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Fol
 
 #select the subset of IDs for this computer to process
 numPCs <- 9
-thisPC_number <- 1    ####UPDATE THIS VALUE###
+thisPC_number <- 6    ####UPDATE THIS VALUE###
 
 numIDs <- length(listIDsForTW)
 startIndex <- floor(numIDs*(thisPC_number-1)/numPCs) + 1
@@ -179,7 +179,7 @@ message("select Events directory with data")
 # if(interactive()) path_data = tk_choose.dir(caption = "select Events directory with data") #, 
 # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB1_3T2016/events")
 
-path_output <- c("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/lab Mac (proc9)")
+path_output <- c("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/lab Mac")
 message("select the output directory")
 # if(interactive()) path_output = tk_choose.dir(caption = "select the output directory") #,
 # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1") 
