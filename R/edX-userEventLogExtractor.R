@@ -194,9 +194,12 @@ load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval 
 ##---^-----------^----------------^----------
 
 # shuffle the order of the student_id values for each instance of this script
-# doing this so all instances can run the same list with little chance of any two
-# working on the same ID at the same time
-#shuffle
+#   doing this so all instances can run the same list with little chance of any two
+#   working on the same ID at the same time
+#set the seed to a random value (so each instance of this script  will use a different set of random numbers)
+newSeed <- sample(set.seed(1))
+set.seed(newSeed)
+#shuffle the IDs
 idList <- listIncompleteIDs[sample(length(listIncompleteIDs))]
 #store the shuffled list for use
 students <- data.frame(student_id = idList)
