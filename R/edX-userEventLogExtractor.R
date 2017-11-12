@@ -160,8 +160,15 @@ path_student_id_csv <- c("data/B1 data/access_data. all.csv")
 load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/listIDsForTW.RData")
 # students <- data.frame(student_id = uid_TW)
 
-#remove the earlier fraction already being worked on in another process
-students <- data.frame(student_id = listIDsForTW[226:300])
+#select the subset of IDs for this computer to process
+numPCs <- 9
+thisPC_number <- 1    ####UPDATE THIS VALUE###
+
+numIDs <- length(listIDsForTW)
+startIndex <- floor(numIDs*(thisPC_number-1)/numPCs) + 1
+endIndex <- floor(numIDs*(thisPC_number)/numPCs)
+
+students <- data.frame(student_id = listIDsForTW[startIndex:endIndex])
 #   -----------------------------------------------------------------------
 
 
