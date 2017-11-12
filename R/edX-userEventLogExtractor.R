@@ -157,18 +157,18 @@ path_student_id_csv <- c("data/B1 data/access_data. all.csv")
 
 
 # temp id list (delete code after run) ------------------------------------
-load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/listIDsForTW.RData")
+load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/uid_assignmentListUpdate.RData")
 # students <- data.frame(student_id = uid_TW)
 
 #select the subset of IDs for this computer to process
 numPCs <- 9
-thisPC_number <- 8    ####UPDATE THIS VALUE###
+thisPC_number <- 9    ####UPDATE THIS VALUE###
 
-numIDs <- length(listIDsForTW)
+numIDs <- length(uid_listForTW)
 startIndex <- floor(numIDs*(thisPC_number-1)/numPCs) + 1
 endIndex <- floor(numIDs*(thisPC_number)/numPCs)
 
-students <- data.frame(student_id = listIDsForTW[startIndex:endIndex])
+students <- data.frame(student_id = uid_listForTW[startIndex:endIndex])
 #   -----------------------------------------------------------------------
 
 

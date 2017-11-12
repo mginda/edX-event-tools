@@ -32,8 +32,8 @@ save(list = c("listIncompleteIDs"), file = "C:/Users/TaylorWilliams/Dropbox (Con
 
 # excluding IDs Doipayan is covering
 load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/uid_assignments.RData")
-listIDsForTW <- listIncompleteIDs[!(listIncompleteIDs %in% uid_DR[-(1:100)])]
-save(list = c("listIDsForTW"), file = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/listIDsForTW.RData")
+uid_listForTW <- listIncompleteIDs[!(listIncompleteIDs %in% uid_DR[-(1:100)])]
+save(list = c("uid_listForTW", "uid_DR", "listIncompleteIDs", "listCompletedIDs"), file = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/uid_assignmentListUpdate.RData")
 
 
 # print results
