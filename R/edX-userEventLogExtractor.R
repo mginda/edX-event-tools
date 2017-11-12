@@ -126,7 +126,7 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
       #   computerProcessor: the processor details for the PC running this script
       loopSummaryLog <- add_row(loopSummaryLog,
                                 student_id = curID,
-                                modulesTouched = students[j,]$number_accesses,
+                                modulesTouched = 999, #students[j,]$number_accesses,
                                 eventCount   = nrow(studentEventLog),
                                 date = format(Sys.time(), "%D"),
                                 time  = format(Sys.time(), "%H:%M:%S"),
@@ -155,9 +155,12 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
 # students <- read.csv(path_student_id_csv, header = TRUE)
 # 
 # # extract only the stuent_id values
-student_IDs <- tibble(student_id = as.numeric())
-student_IDs <- add_row(student_IDs,
-                       student_id = uid_lab_machine)
+# student_IDs <- tibble(student_id = as.numeric())
+# load("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/uid_assignments.RData")
+# student_IDs <- add_row(student_IDs,
+#                        student_id = uid_lab_machine[-(1:300)])
+load("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/listIDsForTW.RData")
+student_IDs <- data.frame(student_id = listIDsForTW[601:700])
 
 #Creates paths used to locate directory for research data sets and save processing outputs
 ##TW TODO: set non-interactive option
@@ -165,7 +168,8 @@ path_data <- c("../B1 inputs/events/")
 message("select Events directory with data")
 # if(interactive()) path_data = tk_choose.dir(caption = "select Events directory with data") #, 
 # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB1_3T2016/events")
-path_output <- c("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/lab Mac")
+
+path_output <- c("/Users/will1630/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1/lab Mac (proc9)")
 message("select the output directory")
 # if(interactive()) path_output = tk_choose.dir(caption = "select the output directory") #,
 # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B1") 
