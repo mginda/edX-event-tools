@@ -35,5 +35,6 @@ save(list = c("listIncompleteIDs", "listCompletedIDs"), file = "C:/Users/TaylorW
 
 
 # print results
+timestamp()
 completionSummary
 message(paste0(sprintf("%.1f", pctComplete), "% complete"))
