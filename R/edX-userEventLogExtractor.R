@@ -62,21 +62,35 @@ require("dplyr")      # for building tibbles (tidy data frames)
 # require("rdrop2")      # for using dropbox
 
 ####Functions ####
+#PrintMinSec
+## The PrintMinSec function takes two Sys.time() values and prints their difference in MM:SS
+PrintMinSecDiff <-  function(fin, ini){
+  dif=as.numeric(difftime(fin, ini, units='min'))
+  return(paste0(sprintf('%02d', as.integer(dif)), ":"
+                ,sprintf('%02.0f', (dif-as.integer(dif))*60)))
+}
+
 
 #logCapture 
-## The logCapture function is a modification of code provided by the Purdue University team
+## The LogCapture function is a modification of code provided by the Purdue University team
 ##   to allow mass extracting individual set of student logs based on known set of student IDs for an 
 ##   edX course. The function creates a unique log file saved to `path_output` for each student ID in the list, 
 ##   saved as either a JSON file (default), a CSV (fileFormat = "CSV"), or both (fileFormat = "both"). 
 LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, fileFormat = "JSON"){      
+  #count number of students
   numStudents <- nrow(student_IDs)
+  #count number of JSON log files 
   numLogFiles <- length(fileList) 
+  #initialize time tracker
+  curID_startTime <- matrix(nrow = 1, data = NA)
+  
+  #loop through the student IDs
   for(j in 1:numStudents){
     curID <- student_IDs$student_id[j]
     
     
     # Build list of all student_id values that have already completed JSON files saved within the path
-    dropboxOutputPath <- "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B2"
+    dropboxOutputPath <- "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B4"
     listCompletedIDs <- list.files(full.names = FALSE, recursive = TRUE, 
                                    path = dropboxOutputPath,
                                    pattern = ".json$", include.dirs = FALSE)
@@ -85,13 +99,17 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
     
     # if it doesn't already exist,  build the JSON event file for the current student_id
     if(!(curID %in% listCompletedIDs)){
+      #save the start time of processing the current ID
+      curID_startTime[j] <- Sys.time()
       
       # loop through all the event files, extract any event matching the current student_id
       for(i in 1:numLogFiles){
         curFileName <- fileList[i] 
         
         #print update message to console
-        message("Processing log file ", i, " of ", numLogFiles, " (for student ", j, " of ", numStudents, "; id: ", curID, "). Previous student completed at ", loopSummaryLog[j-1,]$time)
+        message("Processing log file ", i, " of ", numLogFiles, " (for student ", j, " of ", numStudents, "; id: ", curID, ")")
+        if(j>1) message(PrintMinSecDiff(fin = Sys.time(), ini = curID_startTime[j]), " since curID began; prevID took ", 
+                PrintMinSecDiff(fin = curID_startTime[j], ini = curID_startTime[j-1]))
         print(proc.time() - start)
         
         #read log data (NOTE: logs are in NDJSON format, not typical JSON format)
@@ -148,16 +166,16 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
 # Main --------------------------------------------------------------------
 
 # retrieve list of edX student_id values (from a CSV) whose event data should be extracted 
-path_student_id_csv <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B2/B2 data/access_data. all.csv")
+path_student_id_csv <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B4/B4 data/access_data. all.csv")
 # if(interactive()) path_student_id_csv = (tk_choose.files(caption = "CSV with student_id values")) #,
-# default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Clustering/Boeing pipeline output files/B2, run 2017.11.08/3_ClusteringOutput/access_data. all.csv"))
+# default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Clustering/Boeing pipeline output files/B4, run 2017.11.08/3_ClusteringOutput/access_data. all.csv"))
 
 
 # students <- read.csv(path_student_id_csv, header = TRUE)
 
 
 # temp id list (delete code after run) ------------------------------------
-load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B2/uid_assignmentListUpdate.RData")
+load("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B4/uid_assignmentListUpdate.RData")
 
 ##---v----------v----------v--------------
 ### MARKED FOR DELETION ##
@@ -209,14 +227,14 @@ student_IDs <- data.frame(student_id = students)
 #Creates paths used to locate directory for research data sets and save processing outputs
 ##TW TODO: set non-interactive option
 message("select Events directory with data")
-path_data <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B2/B2 data/events/")
+path_data <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B4/B4 data/events/")
 # if(interactive()) path_data = tk_choose.dir(caption = "select Events directory with data") #, 
-# default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB2_3T2016/events")
+# default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB4_3T2016/events")
 
 message("select the output directory")
-path_output <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B2/TW Laptop/")
+path_output <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B4/TW Laptop/")
 # if(interactive()) path_output = tk_choose.dir(caption = "select the output directory") #,
-# default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B2") 
+# default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B4") 
 
 ## _Build list of all event files for course####
 #Store all the filenames of JSON formatted edX event logs within a user selected directory 
