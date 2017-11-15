@@ -82,7 +82,7 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
   #count number of JSON log files 
   numLogFiles <- length(fileList) 
   #initialize time tracker
-  curID_startTime <- matrix(nrow = 1, data = NA)
+  curID_startTime <- Sys.time()
   
   #loop through the student IDs
   for(j in 1:numStudents){
@@ -108,8 +108,9 @@ LogCapture <- function(student_IDs, fileList, studentEventLog, path_output, file
         
         #print update message to console
         message("Processing log file ", i, " of ", numLogFiles, " (for student ", j, " of ", numStudents, "; id: ", curID, ")")
-        if(j>1) message(PrintMinSecDiff(fin = Sys.time(), ini = curID_startTime[j]), " since curID began; prevID took ", 
-                PrintMinSecDiff(fin = curID_startTime[j], ini = curID_startTime[j-1]))
+        curID_startTime[j+1]  <- Sys.time()
+        message(PrintMinSecDiff(fin = curID_startTime[j+1], ini = curID_startTime[j]), " since curID began",
+                if(j>1) "; prevID took ", PrintMinSecDiff(fin = curID_startTime[j], ini = curID_startTime[j-1]))
         print(proc.time() - start)
         
         #read log data (NOTE: logs are in NDJSON format, not typical JSON format)
@@ -232,7 +233,7 @@ path_data <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextual
 # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/Data/New_Boeing_Data_April2_2017_DO_NOT_USE_WO_KM_Permission/edx data/MITProfessionalX_SysEngxB4_3T2016/events")
 
 message("select the output directory")
-path_output <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B4/TW Laptop/")
+path_output <- c("C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B4/_all indiv.s' logs/")
 # if(interactive()) path_output = tk_choose.dir(caption = "select the output directory") #,
 # default = "C:/Users/TaylorWilliams/Dropbox (Contextualized Eval)/Contextualized Eval Team Folder/GRADS/Taylor/_Boeing/Event logs per student/B4") 
 
