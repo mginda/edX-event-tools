@@ -1,8 +1,9 @@
 edX Event Log Extractor for Individual Users 
 ==============
 Authors:      Taylor Williams  
-Affiliation:  Purdue University
-
+Affiliation:  Purdue University  
+  
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1045292.svg)](https://doi.org/10.5281/zenodo.1045292)  
 _&lt;<https://github.com/tzwilliams/edX-event-tools>&gt;_
 
 Please note that this project is still under active development.  As is, the code is highly experimental and will need to be cleaned before production use.
